@@ -1,0 +1,34 @@
+log:
+  #6 TraceLevel
+  #5 DebugLevel
+  #4 InfoLevel
+  #3 WarnLevel
+  #2 ErrorLevel
+  #1 FatalLevel
+  #0 PanicLevel
+  level: 5
+
+tasks: #数组
+    - name: "推流" #任务名称
+      replicas: 3 #任务数量
+      repeat: -1  #循环次数，-1无限循环
+      delay: 0 #新任务数的启动间隔, 毫秒
+      steps: #依次执行，#执行命令，内置变量 taskSeq 代表任务的序号[1,repeat]
+        - cmd: "ffmpeg -re -i ./pcr_error.ts -vcodec copy -f mpegts udp://127.0.0.{taskSeq}:{taskSeq+10010}"
+          duration: 5000 #运行时长，毫秒，-1代表一直跑
+          tostdio: 0 #打印命令启动输出到控制台
+        - cmd: "ffmpeg -re -i ./pcr_error.ts -vcodec copy -f mpegts udp://127.0.0.{taskSeq+10}:{taskSeq+10010}"
+          duration: 3000
+          tostdio: 0
+
+    - name: "ping" #任务名称
+      replicas: 3 #任务数量
+      repeat: -1  #循环次数，-1无限循环
+      delay: 0 #新任务数的启动间隔, 毫秒
+      steps: #依次执行，#执行命令，内置变量 taskSeq 代表任务的序号[1,repeat]
+        - cmd: "ping www.baidu.com"
+          duration: 1000 #运行时长，毫秒，-1代表一直跑
+          tostdio: 1 #打印命令启动输出到控制台
+        - cmd: "ping www.baidu.com"
+          duration: 2000
+          tostdio: 0

@@ -1,0 +1,4 @@
+.idea/
+*.ts
+go_build_go_task.exe
+go_build_go_task
