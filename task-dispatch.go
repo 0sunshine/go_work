@@ -59,6 +59,10 @@ func doStep(logHeader string, taskSeq int, step StepsTasksYamlConf) error {
 	//cmdObj := exec.Command(cmd)
 	cmd_slice := safeSplit(cmd)
 
+	for idx, v := range cmd_slice {
+		logrus.Infof("cmd_slice %d %v", idx, v)
+	}
+
 	cmdObj := exec.Command(cmd_slice[0], cmd_slice[1:]...)
 
 	if step.Tostdio == 1 {
